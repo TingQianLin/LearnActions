@@ -34,7 +34,7 @@ jobs:
           TAGS: ${{ github.event.inputs.tags }}
           DEPOLY_TARGET: ${{ github.event.inputs.deploy_target }}
   call-reusable-workflow:
-    uses: ./.github/workflows/workflow-call
+    uses: ./.github/workflows/workflow-call.yml
     with:
       perform_deploy: ${{ github.event.inputs.perform_deploy }}
       build_id: ${{ github.event.inputs.build_id }}
