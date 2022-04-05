@@ -1,0 +1,41 @@
+on: 
+  workflow_dispatch:
+    inputs:
+      perform_deploy:
+        description: 'Perform deploy'     
+        required: true
+        default: true 
+        type: boolean
+      tags:
+        description: 'Test scenario tags'
+        required: false 
+        type: boolean
+      deploy_target:
+        description: 'Deploy target selection'
+        required: true
+        type: choice
+        option:
+        - ubuntu-latest
+        - windows-latest
+        - custom 
+      build_id:
+        required: true
+        type: number
+
+jobs:
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Tags: $TAGS"
+          echo "Deploy target: $DEPOLY_TARGET"
+          echo "Perform deploy: ${{ github.event.inputs.perform_deploy }}
+        env:
+          TAGS: ${{ github.event.inputs.tags }}
+          DEPOLY_TARGET: ${{ github.event.inputs.deploy_target }}
+  call-reusable-workflow:
+    uses: ./.github/workflows/workflow-call
+    with:
+      perform_deploy: ${{ github.event.inputs.perform_deploy }}
+      build_id: ${{ github.event.inputs.build_id }}
+      deploy_target: $DEPOLY_TARGET
